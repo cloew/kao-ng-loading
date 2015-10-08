@@ -1,0 +1,83 @@
+use angular;
+    
+angular.module('kao.loading', ['kao.utils'])
+    .factory('LoadingTracker', fn(KaoDefer) {
+        fn LoadingTracker() {
+            this.isLoading = false;
+        }
+        LoadingTracker.prototype.load = fn(promise) {
+            this.isLoading = true;
+            var deferred = KaoDefer();
+            var self = this;
+            
+            promise.success(deferred.resolve).error(deferred.reject);
+            deferred.promise.finally(null).finally(fn() {
+                self.isLoading = false;
+            });
+            
+            return deferred.promise;
+        };
+        return LoadingTracker;
+    })
+    .service('LoadingTrackerService', fn(LoadingTracker) {
+        var trackers = {};
+        return {
+            get: fn(name) {
+                var tracker = trackers[name];
+                if !tracker? {
+                    tracker = new LoadingTracker();
+                    trackers[name] = tracker;
+                }
+                return tracker;
+            }
+        };
+    })
+    .directive('spinner', fn() {
+        return {
+            restrict: 'E',
+            replace: true,
+            template: '<div class="spinner-loader">Loading…</div>'
+        };
+    })
+    .directive('loadingDiv', fn() {
+        return {
+            restrict: 'E',
+            replace: true,
+            transclude: true,
+            scope: {
+                loading: '@'
+            },
+            controller: fn($scope, LoadingTrackerService) {
+                $scope.tracker = LoadingTrackerService.get($scope.loading);
+            },
+            template:  '<div>
+                            <div class="loading-container" ng-if="tracker.isLoading">
+                                <spinner></spinner>
+                            </div>
+                            <ng-transclude ng-if="!tracker.isLoading"></ng-transclude>
+                        </div>'
+        };
+    })
+    .directive('loadingButton', fn() {
+        return {
+            restrict: 'E',
+            replace: true,
+            transclude: true,
+            scope: {
+                loading: '@'
+            },
+            controller: fn($scope, $element, LoadingTrackerService) {
+                $scope.tracker = LoadingTrackerService.get($scope.loading);
+                $scope.$watch(fn(scope) {return scope.tracker.isLoading;},
+                    fn(value) {
+                        if value {
+                            angular.element($element[0]).button('loading');
+                        } else {
+                            angular.element($element[0]).button('reset');
+                        }
+                    }
+                );
+            },
+            template: '<button><ng-transclude></ng-transclude></button>'
+        };
+    });
