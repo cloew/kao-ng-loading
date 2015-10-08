@@ -15,16 +15,6 @@ $traceurRuntime.ModuleStore.getAnonymousModule(function() {
       return deferred.promise;
     };
     return LoadingTracker;
-  }).service("LoadingTrackerService", function(LoadingTracker) {
-    var trackers = {};
-    return {get: function(name) {
-        var tracker = trackers[name];
-        if (!(typeof tracker !== "undefined" && tracker !== null)) {
-          tracker = new LoadingTracker();
-          trackers[name] = tracker;
-        }
-        return tracker;
-      }};
   }).directive("spinner", function() {
     return {
       restrict: "E",
@@ -36,10 +26,7 @@ $traceurRuntime.ModuleStore.getAnonymousModule(function() {
       restrict: "E",
       replace: true,
       transclude: true,
-      scope: {loading: "@"},
-      controller: function($scope, LoadingTrackerService) {
-        $scope.tracker = LoadingTrackerService.get($scope.loading);
-      },
+      scope: {tracker: "="},
       template: "<div>     <div class=\"loading-container\" ng-if=\"tracker.isLoading\">         <spinner></spinner>     </div>     <ng-transclude ng-if=\"!tracker.isLoading\"></ng-transclude> </div>"
     };
   }).directive("loadingButton", function() {
@@ -47,9 +34,9 @@ $traceurRuntime.ModuleStore.getAnonymousModule(function() {
       restrict: "E",
       replace: true,
       transclude: true,
-      scope: {loading: "@"},
-      controller: function($scope, $element, LoadingTrackerService) {
-        $scope.tracker = LoadingTrackerService.get($scope.loading);
+      scope: {tracker: "="},
+      controller: function($scope, $element) {
+        console.log($scope.tracker);
         $scope.$watch(function(scope) {
           return scope.tracker.isLoading;
         }, function(value) {

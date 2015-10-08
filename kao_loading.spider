@@ -1,4 +1,5 @@
 use angular;
+use console;
     
 angular.module('kao.loading', ['kao.utils'])
     .factory('LoadingTracker', fn(KaoDefer) {
@@ -19,19 +20,6 @@ angular.module('kao.loading', ['kao.utils'])
         };
         return LoadingTracker;
     })
-    .service('LoadingTrackerService', fn(LoadingTracker) {
-        var trackers = {};
-        return {
-            get: fn(name) {
-                var tracker = trackers[name];
-                if !tracker? {
-                    tracker = new LoadingTracker();
-                    trackers[name] = tracker;
-                }
-                return tracker;
-            }
-        };
-    })
     .directive('spinner', fn() {
         return {
             restrict: 'E',
@@ -45,10 +33,7 @@ angular.module('kao.loading', ['kao.utils'])
             replace: true,
             transclude: true,
             scope: {
-                loading: '@'
-            },
-            controller: fn($scope, LoadingTrackerService) {
-                $scope.tracker = LoadingTrackerService.get($scope.loading);
+                tracker: '='
             },
             template:  '<div>
                             <div class="loading-container" ng-if="tracker.isLoading">
@@ -64,10 +49,9 @@ angular.module('kao.loading', ['kao.utils'])
             replace: true,
             transclude: true,
             scope: {
-                loading: '@'
+                tracker: '='
             },
-            controller: fn($scope, $element, LoadingTrackerService) {
-                $scope.tracker = LoadingTrackerService.get($scope.loading);
+            controller: fn($scope, $element) {
                 $scope.$watch(fn(scope) {return scope.tracker.isLoading;},
                     fn(value) {
                         if value {
