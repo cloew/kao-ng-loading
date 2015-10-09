@@ -36,7 +36,6 @@ $traceurRuntime.ModuleStore.getAnonymousModule(function() {
       transclude: true,
       scope: {tracker: "="},
       controller: function($scope, $element) {
-        console.log($scope.tracker);
         $scope.$watch(function(scope) {
           return scope.tracker.isLoading;
         }, function(value) {
