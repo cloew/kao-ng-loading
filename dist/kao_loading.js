@@ -51,5 +51,3 @@ $traceurRuntime.ModuleStore.getAnonymousModule(function() {
   });
   return {};
 });
-
-//# sourceMappingURL=kao_loading.map
