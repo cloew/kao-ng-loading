@@ -18,7 +18,7 @@ a.module('kao.loading', ['kao.utils'])
         };
         return LoadingTracker;
     })
-    .directive('spinner', function() {
+    .directive('kao-spinner', function() {
         return {
             restrict: 'E',
             replace: true,
