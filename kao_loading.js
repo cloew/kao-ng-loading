@@ -18,14 +18,14 @@ a.module('kao.loading', ['kao.utils'])
         };
         return LoadingTracker;
     })
-    .directive('kao-spinner', function() {
+    .directive('kaoSpinner', function() {
         return {
             restrict: 'E',
             replace: true,
             template: '<div class="spinner-loader">Loading…</div>'
         };
     })
-    .directive('loadingDiv', function() {
+    .directive('kaoLoadingDiv', function() {
         return {
             restrict: 'E',
             replace: true,
@@ -41,7 +41,7 @@ a.module('kao.loading', ['kao.utils'])
                         '</div>'
         };
     })
-    .directive('loadingButton', function() {
+    .directive('kaoLoadingButton', function() {
         return {
             restrict: 'E',
             replace: true,
