@@ -1,12 +1,12 @@
 function(a) {
-a.module('kao.loading', ['kao.utils'])
-    .factory('LoadingTracker', function(KaoDefer) {
+a.module('kao.loading', [])
+    .factory('LoadingTracker', function($q) {
         function LoadingTracker() {
             this.isLoading = false;
         }
         LoadingTracker.prototype.load = function(promise) {
             this.isLoading = true;
-            var deferred = KaoDefer();
+            var deferred = $q.defer();
             var self = this;
             
             promise.success(deferred.resolve).error(deferred.reject);
