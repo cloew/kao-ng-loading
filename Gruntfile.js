@@ -11,23 +11,19 @@ module.exports = function(grunt) {
                 }]
             }
         },
-        spider_script: {
+        concat: {
             options: {
-                sourcemap: false
+                sourceMap: true,
             },
-            compile: {
-                files: [{
-                    expand: true,
-                    src: ['*.spider'],
-                    dest: 'dist/',
-                    ext: '.js'
-                }]
+            distJs: {
+              src: ['*.js'],
+              dest: 'dist/kao_loading.js',
             }
         }
     });
     grunt.loadNpmTasks('grunt-contrib-sass');
-    grunt.loadNpmTasks('grunt-spider-script');
+    grunt.loadNpmTasks('grunt-contrib-concat');
 
     // Default task(s).
-    grunt.registerTask('default', ['sass', 'spider_script']);
+    grunt.registerTask('default', ['sass', 'concat']);
 };
