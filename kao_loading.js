@@ -35,7 +35,7 @@ a.module('kao.loading', [])
             },
             template:  '<div>'+
                             '<div class="loading-container" ng-if="tracker.isLoading">' +
-                                '<spinner></spinner>' +
+                                '<kao-spinner></kao-spinner>' +
                             '</div>' +
                             '<ng-transclude ng-if="!tracker.isLoading"></ng-transclude>' +
                         '</div>'
